@@ -3,16 +3,23 @@ Tracks life in Magic the Gathering; written in C++
 _______________________________________________________
 Reason Made: Used as extra Curricular learning of C++, used as Final project in C++ 1.
 Use: Track life in the game of Magic: the Gathering. 
-Features: 
+
+Features:
 1)Lets you choose between multiple ways of play. 
-2)Can track any number of players life totals. 
+
+2)Can track any number of players life totals.
+
 3)Outputs to both screen and file.
+
 4)Reports Win and loss at end of game.
+
 5) Allows you to play many games.
 
 Features to add:
 1) Track win loss record during each run of program.
+
   a) possibly have seperate file that records each persons records and can be read from and change over multiple runs.
+
     i) problem: players with same initials.
 2) Streamline multiple player life changes
   a) Current: When only one player's life changes, every other person must be inputed as 0.
