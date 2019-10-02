@@ -2,7 +2,7 @@ CXX         = g++
 LIBARYFLAGS = 
 CXXFLAGS    = -std=c++1z -Wall -Wextra -Wparentheses -g $(SANS)
 
-.PHOMY:all seg msan
+.PHONY:all seg msan
 all: format TAGS deps mains
 seg: clean msan
 msan:
@@ -15,7 +15,7 @@ TAGS:
 	@echo "Generated Tags"
 
 # use the etags file to find all excicutables
-.PHOMY:mains
+.PHONY:mains
 mains:
 	@for f in `ls *.c*` ; do \
 		if etags $$f -o - | grep "int main(" - > /dev/null; \
@@ -23,7 +23,7 @@ mains:
 		fi ; \
 	done
 
-.PHOMY:deps
+.PHONY:deps
 deps:
 	-@for f in `ls *.cpp` ; do \
 		echo $$f | sed -e 's,cpp$$,d,' -e 's/.*/make -s .d\/&/'|sh; \
@@ -44,21 +44,24 @@ $(DEPDIR)/%.d: %.cpp
 	@echo "remade $@"
 
 # emacs flycheck-mode
-.PHOMY:check-syntax csyntax
+.PHONY:check-syntax csyntax
 check-syntax: csyntax
 csyntax:
 	$(CXX) $(CXXFLAGS) -c ${CHK_SOURCES} -o /dev/null
 
-.PHOMY: clean
+.PHONY: clean
 clean:
 	rm -f *.o *.bin .d/*.d
 	rmdir .d
 
-.PHOMY: format
+.PHONY: format
 format:
 	@find|egrep '.*[.](cpp|cxx|cc|c++|c|tpp|txx)$$'|sed 's/[] ()'\''\\[&;]/\\&/g'|xargs clang-format-6.0 -i
 	@echo "reformatted code"
 
+.PHONY: tidy
+tidy:
+	clang-tidy-6.0 *.cpp -checks="*" -- $(CXXFLAGS)
 
 include $(wildcard $(DEPDIR)/*.d)
 include $(wildcard *.d)

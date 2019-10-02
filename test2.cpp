@@ -16,6 +16,57 @@ void new_line() {
     cin.get(next);
   } while (next != '\n');
 }
+
+void setlife(int S, int &num_players, int l[]) {
+  int style = S, lifestart;
+  if (style == '1') {
+    lifestart = 20;
+  }
+  if (style == '2') {
+    lifestart = 30;
+    num_players =
+        num_players / 2; // does not work with inputing odd player number
+    // added to fix problem with 2heaed calculations
+  }
+  if (style == '3') { // these were changed from = to ==
+    lifestart = 40;
+  }
+  for (int i = 0; i > num_players; i++) { // life inicialization added
+    l[i] = lifestart;
+  }
+}
+void twoheaded() { // moved into a function
+  cout << players[0][0];
+  cout << "/";
+  cout << players[1][0];
+  cout << " vs.";
+  cout << players[2][0];
+  cout << "/";
+  cout << players[3][0];
+  cout << "\n\n";
+  cout.width(4);
+  cout << left << "Tm1";
+  cout << " | ";
+  cout.width(4);
+  cout << right << "Tm2\n";
+  cout << "_____|______\n";
+
+  record << "\nStart Game\n";
+  record << players[0][0];
+  record << "/";
+  record << players[1][0];
+  record << " vs. ";
+  record << players[2][0];
+  record << "/";
+  record << players[3][0];
+  record << "\n\n";
+  record << setw(4) << left << "Tm1";
+  record << " | ";
+  record << setw(4) << right << "Tm2\n";
+  record << "_____|______\n";
+}
+// this function needs editing so that it records more then the last player to
+// file
 void getplayers(string players[20][4], int &num_players) {
   char next, letter;
   ofstream cin_out;
@@ -48,36 +99,15 @@ void getplayers(string players[20][4], int &num_players) {
     getline(cin_in, players[i][0], '\n');
     cin_in.close();
   }
-
-  // for (int i = 0; i < num_players; i++)
-  //{
-  // cout << players[i][0] << "\n";
-  //}
-}
-void playerscom() {
-  // future changes will have this doing for (i=0, i>num_players,i++) so that it
-  // can work 2 or more players.
-  // adding another "vs. " and players[i][0] plus the apropriet table section.
-  // same loop would then be used for life output once life is set to
-  // players[i][1].
 }
 int main() {
   using namespace std;
   char letter, style, playercheck, stylecheck;
   ofstream record;
   int life[20], chan[20];
-  int chan_1, newlife, chang, lifechan, lifestart, num_players = 2,
-                                                   gamecount = 0;
-  // life_1 shall later become players[0][1] and life_2 becoming players[1][1],
-  // ext. chan_1 shall be part of a loop or funtion that gets the change for
-  // first life aplays it to the life
-  // and then getts the next change. Effectively becoming chan_[i].
-  // once implemented commander no longer to be specified players.
+  int chan_1, newlife, chang, num_players = 2,
+                              gamecount = 0; // removed unused variables
   cout << "This program will keep track of life totals in a game of Magic.\n";
-  // cout << "It can also keep track of deck size and poison counters if you
-  // tern those features on.\n\n"; cout << "The program can do 1v1, 2 headed
-  // giant, and multiplayer, with draft, commander and 60 card decks.\n";
-  // deck size to be players[i][2] and poison to be players[i][3]
   cout << "The program can do 1v1, 2 headed giant, and 4 player commander.\n";
   cout << "Whenever a life total changes, enter the changes to each player's, "
           "or team's, life starting with player one.\n";
@@ -127,46 +157,10 @@ int main() {
 
       int winner, lifestart, replay = 0;
       // see if possible to skip a player so that number of inputs can go down
-      if (style = '1') {
-        lifestart = 20;
-      }
-      if (style = '2') {
-        lifestart = 30;
-      }
-      if (style = '3') {
-        lifestart = 40;
-      }
       cout << "Start Game\n";
 
-      if (style = '2') {
-        cout << players[0][0];
-        cout << "/";
-        cout << players[1][0];
-        cout << " vs.";
-        cout << players[2][0];
-        cout << "/";
-        cout << players[3][0];
-        cout << "\n\n";
-        cout.width(4);
-        cout << left << "Tm1";
-        cout << " | ";
-        cout.width(4);
-        cout << right << "Tm2\n";
-        cout << "_____|______\n";
-
-        record << "\nStart Game\n";
-        record << players[0][0];
-        record << "/";
-        record << players[1][0];
-        record << " vs. ";
-        record << players[2][0];
-        record << "/";
-        record << players[3][0];
-        record << "\n\n";
-        record << setw(4) << left << "Tm1";
-        record << " | ";
-        record << setw(4) << right << "Tm2\n";
-        record << "_____|______\n";
+      if (style == '2') { // changed from = to ==
+        twoheaded();
       } else {
         cout << players[0][0] << " vs. " << players[1][0];
         for (int p = 2; p < num_players; p++) {
@@ -283,8 +277,8 @@ int main() {
             winner = w;
           }
         }
-      } while (replay != 1);
-      if (style = '2') {
+      } while (replay > 1 && cin);
+      if (style == '2') { // changed from = to ==
         cout << "Winner is Team " << winner + 1 << ".\n";
         record << "Winner is Team " << winner + 1 << ".\n";
       } else {
@@ -292,7 +286,7 @@ int main() {
         record << "Winner is " << players[winner][0] << ".\n";
       }
       gamecount = 0;
-    } while (gamecount > 0);
+    } while (gamecount > 0 && cin); // added && cin for close on testing
     new_line();
     cout << "\nAnother game (Y or N)?\n";
     gamecount++;
