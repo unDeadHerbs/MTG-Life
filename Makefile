@@ -1,4 +1,4 @@
-CXX         = g++
+CXX         = clang++
 LIBARYFLAGS = 
 CXXFLAGS    = -std=c++1z -Wall -Wextra -Wparentheses -g $(SANS)
 
@@ -56,12 +56,12 @@ clean:
 
 .PHONY: format
 format:
-	@find|egrep '.*[.](cpp|cxx|cc|c++|c|tpp|txx)$$'|sed 's/[] ()'\''\\[&;]/\\&/g'|xargs clang-format-6.0 -i
+	@find|egrep '.*[.](cpp|cxx|cc|c++|c|tpp|txx)$$'|sed 's/[] ()'\''\\[&;]/\\&/g'|xargs clang-format -i
 	@echo "reformatted code"
 
 .PHONY: tidy
 tidy:
-	clang-tidy-6.0 *.cpp -checks="*" -- $(CXXFLAGS)
+	clang-tidy *.cpp -checks="*" -- $(CXXFLAGS)
 
 include $(wildcard $(DEPDIR)/*.d)
 include $(wildcard *.d)
